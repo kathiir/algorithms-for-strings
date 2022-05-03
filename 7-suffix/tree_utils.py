@@ -18,7 +18,11 @@ def st_arc_init_ex(s_node: Node, ch_arc: str, beg_idx: int, end_idx: int, dest: 
     return arc
 
 
-def find_suffix_tree_arc(string: str, substring: str, m: int, m_same: int, tree: Node):
+def get_end_idx(arc: Arc, curr_phase):
+    return arc.end_idx if arc.dest else curr_phase
+
+
+def find_suffix_tree_arc(string: str, substring: str, m: int, m_same: int, tree: Node, curr_phase: int = 0):
     arc = None  # arc on which search have stopped
     idx_substr = idx_arc = 0  # Indexes of different symbols
     cur = tree
@@ -30,23 +34,23 @@ def find_suffix_tree_arc(string: str, substring: str, m: int, m_same: int, tree:
             idx_arc = arc.beg_idx
             n_same_rest = m_same - idx_substr
             if n_same_rest > 0:
-                n_arc_len = arc.end_idx - arc.beg_idx + 1
+                n_arc_len = get_end_idx(arc, curr_phase) - arc.beg_idx + 1
                 if n_same_rest <= n_arc_len:
                     idx_substr = m_same - 1
                     idx_arc += n_same_rest - 1
                 else:
                     idx_substr += n_arc_len
-                    idx_arc = arc.end_idx + 1
+                    idx_arc = get_end_idx(arc, curr_phase) + 1
                     cur = arc.dest
                     continue
 
             idx_substr += 1
             idx_arc += 1
-            while idx_substr < m and idx_arc < arc.end_idx + 1 and substring[idx_substr] == string[idx_arc]:
+            while idx_substr < m and idx_arc < get_end_idx(arc, curr_phase) + 1 and substring[idx_substr] == string[idx_arc]:
                 idx_substr += 1
                 idx_arc += 1
 
-            if idx_arc <= arc.end_idx or idx_substr == m - 1:
+            if idx_arc <= get_end_idx(arc, curr_phase):
                 stopped = True
             else:
                 cur = arc.dest
@@ -66,7 +70,7 @@ def st_leaves_traversal(start: Arc):
             st_leaves_traversal(arc)
 
 
-def top_jump_bottom(string: str, substring: str, m: int, arc: Arc, arc_end_idx: int, idx_substr: int, idx_arc: int):
+def top_jump_bottom(string: str, substring: str, m: int, arc: Arc, arc_end_idx: int, idx_substr: int, idx_arc: int, current_phase: int):
     if not arc:
         return None, idx_substr, idx_arc
     arc_next = None
@@ -83,11 +87,11 @@ def top_jump_bottom(string: str, substring: str, m: int, arc: Arc, arc_end_idx: 
     if not src_vert.s_ref:
         n_chars_up -= 1
     n_vert_chr = m - n_chars_up
-    arc_next, idx_substr, idx_arc = find_suffix_tree_arc(string, substring[n_vert_chr:], n_chars_up, n_chars_up - 1, ref_vert)
+    arc_next, idx_substr, idx_arc = find_suffix_tree_arc(string, substring[n_vert_chr:], n_chars_up, n_chars_up - 1, ref_vert, current_phase)
     if not arc_next:
         arc_next = ref_vert.arc_in
         if arc_next:
-            idx_arc = arc_next.end_idx + 1
+            idx_arc = get_end_idx(arc_next, current_phase) + 1
     idx_substr += n_vert_chr
     return arc_next, idx_substr, idx_arc
 

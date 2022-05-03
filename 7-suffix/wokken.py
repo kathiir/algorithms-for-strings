@@ -18,7 +18,7 @@ def st_build_online_1(string: str):
                 end_prev_idx = i - 1
                 idx_arc = i
                 idx_substr = m - 1
-            uv_arc, idx_substr, idx_arc = top_jump_bottom(string, string[j:], m, arc_prev, end_prev_idx, idx_substr, idx_arc)
+            uv_arc, idx_substr, idx_arc = top_jump_bottom(string, string[j:], m, arc_prev, end_prev_idx, idx_substr, idx_arc, i)
 
             if idx_substr == m:
                 js = j
@@ -29,7 +29,7 @@ def st_build_online_1(string: str):
             elif not arc_prev.dest:
                 end_prev_idx = i
             else:
-                end_prev_idx = arc_prev.end_idx
+                end_prev_idx = get_end_idx(arc_prev, i)
 
             wn_node = None
             if not uv_arc:
@@ -52,8 +52,8 @@ def st_build_online_1(string: str):
             else:
                 if ref_from:
                     ref_from.s_ref = wn_node
-                    ref_from = None
+                ref_from = None
 
-            arc_0 = st_arc_init_ex(wn_node, string[i], i, i, None, j)
+            arc_0 = st_arc_init_ex(wn_node, string[i], i, i, None, j + 1)
 
     return tree
