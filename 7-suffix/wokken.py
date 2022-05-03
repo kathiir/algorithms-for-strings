@@ -1,4 +1,3 @@
-from tree import *
 from tree_utils import *
 
 
@@ -20,6 +19,7 @@ def st_build_online_1(string: str):
                 idx_arc = i
                 idx_substr = m - 1
             uv_arc, idx_substr, idx_arc = top_jump_bottom(string, string[j:], m, arc_prev, end_prev_idx, idx_substr, idx_arc)
+
             if idx_substr == m:
                 js = j
                 break
@@ -39,7 +39,7 @@ def st_build_online_1(string: str):
 
             if uv_arc and idx_arc <= end_prev_idx:
                 wn_node = st_vert_init_ex(uv_arc)
-                wv_arc = st_arc_init_ex(wn_node, ord(string[idx_arc]), idx_arc, uv_arc.end_idx, uv_arc.dest, uv_arc.dest_idx)
+                wv_arc = st_arc_init_ex(wn_node, string[idx_arc], idx_arc, uv_arc.end_idx, uv_arc.dest, uv_arc.dest_idx)
                 if uv_arc.dest:
                     uv_arc.dest.arc_in = wv_arc
                 uv_arc.dest = wn_node
@@ -54,6 +54,6 @@ def st_build_online_1(string: str):
                     ref_from.s_ref = wn_node
                     ref_from = None
 
-            arc_0 = st_arc_init_ex(wn_node, ord(string[i]), i, i, None, j + 1)
+            arc_0 = st_arc_init_ex(wn_node, string[i], i, i, None, j)
 
     return tree
