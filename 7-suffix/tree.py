@@ -1,5 +1,3 @@
-from enum import Enum
-
 
 class Node:
     def __init__(self):

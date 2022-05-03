@@ -1,4 +1,4 @@
-from tree_utils import *
+from tree_utils import st_vert_init_ex, st_arc_init_ex, top_jump_bottom
 
 
 def st_build_online_1(string: str):
@@ -29,7 +29,7 @@ def st_build_online_1(string: str):
             elif not arc_prev.dest:
                 end_prev_idx = i
             else:
-                end_prev_idx = get_end_idx(arc_prev, i)
+                end_prev_idx = arc_prev.end_idx
 
             wn_node = None
             if not uv_arc:

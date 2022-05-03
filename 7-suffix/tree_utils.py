@@ -50,7 +50,7 @@ def find_suffix_tree_arc(string: str, substring: str, m: int, m_same: int, tree:
                 idx_substr += 1
                 idx_arc += 1
 
-            if idx_arc <= get_end_idx(arc, curr_phase):
+            if idx_arc <= get_end_idx(arc, curr_phase) or idx_substr == m:
                 stopped = True
             else:
                 cur = arc.dest
